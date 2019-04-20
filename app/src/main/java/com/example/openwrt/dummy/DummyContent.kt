@@ -1,7 +1,11 @@
 package com.example.openwrt.dummy
 
-import java.util.ArrayList
-import java.util.HashMap
+import android.text.format.Formatter.formatIpAddress
+import android.content.Context.WIFI_SERVICE
+import android.support.v4.content.ContextCompat.getSystemService
+import java.util.*
+import android.net.wifi.WifiManager as WifiManager
+
 
 /**
  * Helper class for providing sample content for user interfaces created by
