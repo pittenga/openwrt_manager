@@ -1,5 +1,7 @@
 package com.example.openwrt
 
+import android.net.DhcpInfo
+import android.net.wifi.WifiInfo
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -18,7 +20,8 @@ import kotlinx.android.synthetic.main.fragment_item.view.*
  * TODO: Replace the implementation with code for your data type.
  */
 class MyItemRecyclerViewAdapter(
-    private val mValues: List<DummyItem>,
+    private val mWifiInfo: WifiInfo,
+    private val mDhcpInfo: DhcpInfo,
     private val mListener: OnListFragmentInteractionListener?
 ) : RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder>() {
 
@@ -26,7 +29,7 @@ class MyItemRecyclerViewAdapter(
 
     init {
         mOnClickListener = View.OnClickListener { v ->
-            val item = v.tag as DummyItem
+            val item = v.tag as DhcpInfo
             // Notify the active callbacks interface (the activity, if the fragment is attached to
             // one) that an item has been selected.
             mListener?.onListFragmentInteraction(item)
@@ -40,17 +43,25 @@ class MyItemRecyclerViewAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = mValues[position]
-        holder.mIdView.text = item.id
-        holder.mContentView.text = item.content
+
+        holder.mIdView.text = mWifiInfo.ssid
+        holder.mContentView.text = ipToString(mDhcpInfo.gateway)
 
         with(holder.mView) {
-            tag = item
+            tag = mDhcpInfo
             setOnClickListener(mOnClickListener)
         }
     }
 
-    override fun getItemCount(): Int = mValues.size
+    private fun ipToString(i: Int): String {
+        return (i and 0xFF).toString() + "." +
+                (i shr 8 and 0xFF) + "." +
+                (i shr 16 and 0xFF) + "." +
+                (i shr 24 and 0xFF)
+
+    }
+
+    override fun getItemCount(): Int = 1
 
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
         val mIdView: TextView = mView.item_number

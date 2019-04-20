@@ -1,8 +1,10 @@
 package com.example.openwrt.dummy
 
+import android.content.Context
 import android.text.format.Formatter.formatIpAddress
 import android.content.Context.WIFI_SERVICE
 import android.support.v4.content.ContextCompat.getSystemService
+import android.util.Log
 import java.util.*
 import android.net.wifi.WifiManager as WifiManager
 

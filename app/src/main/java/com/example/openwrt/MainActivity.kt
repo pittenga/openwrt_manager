@@ -1,6 +1,7 @@
 package com.example.openwrt
 
 import android.content.Context
+import android.net.DhcpInfo
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v7.app.AppCompatActivity
@@ -38,15 +39,13 @@ class MainActivity : AppCompatActivity(),
 
     }
 
-    override fun onListFragmentInteraction(item: DummyContent.DummyItem?) {
-        Log.v("Yes!", "Got here!" + item.toString())
-
+    override fun onListFragmentInteraction(item: DhcpInfo) {
         findNavController(this, R.id.fragment).navigate(R.id.action_routerSelectionFragment_to_blankFragment);
     }
 
     override fun onNavigationItemSelected(p0: MenuItem): Boolean {
         Log.v("Yes!", "Got to Navigation Item Selected")
-        return false;
+        return false
     }
 
 }

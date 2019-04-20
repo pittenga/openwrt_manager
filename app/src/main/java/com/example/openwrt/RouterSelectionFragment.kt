@@ -1,11 +1,14 @@
 package com.example.openwrt
 
 import android.content.Context
+import android.net.DhcpInfo
+import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -46,10 +49,24 @@ class RouterSelectionFragment : Fragment() {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                adapter = MyItemRecyclerViewAdapter(DummyContent.ITEMS, listener)
+                val wm = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
+                Log.v("Fragment", "SSID: " + wm.connectionInfo.ssid)
+                Log.v("Fragment", "IP: " + ipToString(wm.connectionInfo.ipAddress))
+                Log.v("Fragment", "Network ID: " + ipToString(wm.dhcpInfo.gateway))
+                Log.v("Fragment", "IP: " + ipToString(wm.dhcpInfo.ipAddress))
+
+                adapter = MyItemRecyclerViewAdapter(wm.connectionInfo, wm.dhcpInfo, listener)
             }
         }
         return view
+    }
+
+    private fun ipToString(i: Int): String {
+        return (i and 0xFF).toString() + "." +
+                (i shr 8 and 0xFF) + "." +
+                (i shr 16 and 0xFF) + "." +
+                (i shr 24 and 0xFF)
+
     }
 
     override fun onAttach(context: Context) {
@@ -79,7 +96,7 @@ class RouterSelectionFragment : Fragment() {
      */
     interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        fun onListFragmentInteraction(item: DummyItem?)
+        fun onListFragmentInteraction(item: DhcpInfo)
     }
 
     companion object {
