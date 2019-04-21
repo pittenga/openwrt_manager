@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +13,7 @@ import com.example.openwrt.dummy.DummyContent
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
+private const val ARG_PARAM1 = "ipaddress"
 private const val ARG_PARAM2 = "param2"
 
 /**
@@ -26,15 +27,14 @@ private const val ARG_PARAM2 = "param2"
  */
 class BlankFragment : Fragment() {
     // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var ipaddress: Int? = null
     private var listener: OnFragmentInteractionListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            ipaddress = it.getInt(ARG_PARAM1)
+            Log.v("BlankFragment", "IP Address: " + ipToString(it.getInt(ARG_PARAM1)))
         }
     }
 
@@ -49,6 +49,16 @@ class BlankFragment : Fragment() {
     // TODO: Rename method, update argument and hook method into UI event
     fun onButtonPressed(uri: Uri) {
         listener?.onFragmentInteraction(uri)
+    }
+
+
+
+    private fun ipToString(i: Int): String {
+        return (i and 0xFF).toString() + "." +
+                (i shr 8 and 0xFF) + "." +
+                (i shr 16 and 0xFF) + "." +
+                (i shr 24 and 0xFF)
+
     }
 
     /*

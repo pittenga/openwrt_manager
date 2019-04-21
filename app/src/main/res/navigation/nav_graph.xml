@@ -5,7 +5,9 @@
             app:startDestination="@id/routerSelectionFragment">
 
     <fragment android:id="@+id/blankFragment" android:name="com.example.openwrt.BlankFragment"
-              android:label="fragment_login" tools:layout="@layout/fragment_login"/>
+              android:label="fragment_login" tools:layout="@layout/fragment_login">
+        <argument android:name="ipaddress" app:argType="integer" android:defaultValue="0"/>
+    </fragment>
     <fragment android:id="@+id/routerSelectionFragment" android:name="com.example.openwrt.RouterSelectionFragment"
               android:label="fragment_item_list" tools:layout="@layout/fragment_item_list">
         <action android:id="@+id/action_routerSelectionFragment_to_blankFragment" app:destination="@id/blankFragment"/>

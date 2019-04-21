@@ -50,11 +50,6 @@ class RouterSelectionFragment : Fragment() {
                     else -> GridLayoutManager(context, columnCount)
                 }
                 val wm = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
-                Log.v("Fragment", "SSID: " + wm.connectionInfo.ssid)
-                Log.v("Fragment", "IP: " + ipToString(wm.connectionInfo.ipAddress))
-                Log.v("Fragment", "Network ID: " + ipToString(wm.dhcpInfo.gateway))
-                Log.v("Fragment", "IP: " + ipToString(wm.dhcpInfo.ipAddress))
-
                 adapter = MyItemRecyclerViewAdapter(wm.connectionInfo, wm.dhcpInfo, listener)
             }
         }

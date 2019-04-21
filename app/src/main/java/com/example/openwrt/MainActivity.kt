@@ -15,7 +15,6 @@ import android.text.format.Formatter.formatIpAddress
 import android.net.wifi.WifiManager
 
 
-
 class MainActivity : AppCompatActivity(),
     RouterSelectionFragment.OnListFragmentInteractionListener,
     NavigationView.OnNavigationItemSelectedListener {
@@ -40,12 +39,13 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun onListFragmentInteraction(item: DhcpInfo) {
-        findNavController(this, R.id.fragment).navigate(R.id.action_routerSelectionFragment_to_blankFragment);
+        val directions = RouterSelectionFragmentDirections.action_routerSelectionFragment_to_blankFragment().setIpaddress(item.gateway)
+        findNavController(this, R.id.fragment).navigate(directions)
     }
 
     override fun onNavigationItemSelected(p0: MenuItem): Boolean {
         Log.v("Yes!", "Got to Navigation Item Selected")
-        return false
+        return false;
     }
 
 }
