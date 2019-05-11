@@ -50,7 +50,11 @@ class RouterSelectionFragment : Fragment() {
                     else -> GridLayoutManager(context, columnCount)
                 }
                 val wm = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
-                adapter = MyItemRecyclerViewAdapter(wm.connectionInfo, wm.dhcpInfo, listener)
+                var list = ArrayList<RouterInfo>()
+                list.add(RouterInfo(wm.dhcpInfo.ipAddress, wm.connectionInfo.ssid))
+                //TODO: This isn't working...
+                list.add(RouterInfo(wm.dhcpInfo.ipAddress, wm.connectionInfo.ssid))
+                adapter = MyItemRecyclerViewAdapter(list, listener)
             }
         }
         return view
@@ -91,7 +95,7 @@ class RouterSelectionFragment : Fragment() {
      */
     interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        fun onListFragmentInteraction(item: DhcpInfo)
+        fun onListFragmentInteraction(item: RouterInfo)
     }
 
     companion object {

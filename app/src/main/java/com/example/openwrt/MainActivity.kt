@@ -13,6 +13,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import android.text.format.Formatter.formatIpAddress
 import android.net.wifi.WifiManager
+import android.support.v7.widget.SimpleItemAnimator
+
+
 
 
 class MainActivity : AppCompatActivity(),
@@ -23,23 +26,11 @@ class MainActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-        val wm = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
-        Log.v("OnCreate", "SSID: " + wm.connectionInfo.ssid)
-        Log.v("OnCreate", "IP: " + ipToString(wm.connectionInfo.ipAddress))
-        Log.v("OnCreate", "Network ID: " + ipToString(wm.dhcpInfo.gateway))
 
     }
 
-    private fun ipToString(i: Int): String {
-        return (i and 0xFF).toString() + "." +
-                (i shr 8 and 0xFF) + "." +
-                (i shr 16 and 0xFF) + "." +
-                (i shr 24 and 0xFF)
-
-    }
-
-    override fun onListFragmentInteraction(item: DhcpInfo) {
-        val directions = RouterSelectionFragmentDirections.action_routerSelectionFragment_to_blankFragment().setIpaddress(item.gateway)
+    override fun onListFragmentInteraction(item: RouterInfo) {
+        val directions = RouterSelectionFragmentDirections.action_routerSelectionFragment_to_blankFragment().setIpaddress(item.ip)
         findNavController(this, R.id.fragment).navigate(directions)
     }
 
