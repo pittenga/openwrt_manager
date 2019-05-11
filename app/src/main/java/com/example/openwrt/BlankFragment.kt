@@ -9,6 +9,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.openwrt.dummy.DummyContent
+import kotlinx.android.synthetic.main.fragment_login.*
+import kotlinx.android.synthetic.main.fragment_login.view.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -25,9 +27,10 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  *
  */
-class BlankFragment : Fragment() {
+class BlankFragment : Fragment(), View.OnClickListener {
+
     // TODO: Rename and change types of parameters
-    private var ipaddress: Int? = null
+    private var ipaddress: Int = 0
     private var listener: OnFragmentInteractionListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,6 +39,7 @@ class BlankFragment : Fragment() {
             ipaddress = it.getInt(ARG_PARAM1)
             Log.v("BlankFragment", "IP Address: " + ipToString(it.getInt(ARG_PARAM1)))
         }
+
     }
 
     override fun onCreateView(
@@ -43,7 +47,9 @@ class BlankFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_login, container, false)
+        val view = inflater.inflate(R.layout.fragment_login, container, false)
+        view.loginButton.setOnClickListener(this);
+        return view
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -51,7 +57,10 @@ class BlankFragment : Fragment() {
         listener?.onFragmentInteraction(uri)
     }
 
-
+    override fun onClick(v: View?) {
+        //Try to connect to IP
+        Log.v("BlankFragment", "IP Address: " + ipToString(ipaddress))
+    }
 
     private fun ipToString(i: Int): String {
         return (i and 0xFF).toString() + "." +
@@ -61,16 +70,6 @@ class BlankFragment : Fragment() {
 
     }
 
-    /*
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is OnFragmentInteractionListener) {
-            listener = context
-        } else {
-            throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
-        }
-    }
-    */
 
     override fun onDetach() {
         super.onDetach()
