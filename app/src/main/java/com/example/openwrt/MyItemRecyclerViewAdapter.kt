@@ -51,18 +51,8 @@ class MyItemRecyclerViewAdapter(
         }
     }
 
-    private val mOnClickListener: View.OnClickListener
     init {
-        mOnClickListener = View.OnClickListener { v ->
-            var info: RouterInfo = v.tag as RouterInfo
-            //root - administrator
-            var connection = RouterConnection(info.ipString, info.uname, info.password)
-            connection.connect()
 
-            // Notify the active callbacks interface (the activity, if the fragment is attached to
-            // one) that an item has been selected.
-            //mListener?.onListFragmentInteraction(info)
-        }
 
     }
 
@@ -80,11 +70,19 @@ class MyItemRecyclerViewAdapter(
         holder.mContentView.text = info.ssid
         holder.mSubContentView.visibility = (if (info.expanded) View.VISIBLE else View.GONE)
 
-        with(holder.mSubContentView.loginButton){
-            info.uname = holder.mSubContentView.uname.text.toString()
-            info.password = holder.mSubContentView.password.text.toString()
-            tag = info
-            setOnClickListener(mOnClickListener)
+        with(holder.mSubContentView){
+            loginButton.tag = info
+            loginButton.setOnClickListener { v ->
+                var info: RouterInfo = v.tag as RouterInfo
+                //root - administrator
+
+                var connection = RouterConnection(info.ipString, uname.text.toString(), password.text.toString())
+                connection.connect()
+
+                // Notify the active callbacks interface (the activity, if the fragment is attached to
+                // one) that an item has been selected.
+                //mListener?.onListFragmentInteraction(info)
+            }
         }
 
         with(holder.mView) {
