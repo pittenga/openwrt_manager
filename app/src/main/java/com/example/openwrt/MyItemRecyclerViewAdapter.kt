@@ -1,7 +1,5 @@
 package com.example.openwrt
 
-import android.net.DhcpInfo
-import android.net.wifi.WifiInfo
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,6 +13,13 @@ import com.example.openwrt.dummy.DummyContent.DummyItem
 
 import kotlinx.android.synthetic.main.fragment_item.view.*
 import android.widget.LinearLayout
+import android.widget.Toast
+import com.github.kittinunf.fuel.Fuel
+import com.github.kittinunf.fuel.core.Headers
+import com.github.kittinunf.fuel.core.extensions.jsonBody
+import org.json.JSONObject
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 /**
@@ -27,14 +32,37 @@ class MyItemRecyclerViewAdapter(
     private val mListener: OnListFragmentInteractionListener?
 ) : RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder>() {
 
+
+    fun json(build: JsonObjectBuilder.() -> Unit): JSONObject {
+        return JsonObjectBuilder().json(build)
+    }
+
+    class JsonObjectBuilder {
+        private val deque: Deque<JSONObject> = ArrayDeque()
+
+        fun json(build: JsonObjectBuilder.() -> Unit): JSONObject {
+            deque.push(JSONObject())
+            this.build()
+            return deque.pop()
+        }
+
+        infix fun <T> String.To(value: T) {
+            deque.peek().put(this, value)
+        }
+    }
+
     private val mOnClickListener: View.OnClickListener
     init {
         mOnClickListener = View.OnClickListener { v ->
-                        val item = v.tag as RouterInfo
-                        // Notify the active callbacks interface (the activity, if the fragment is attached to
-                        // one) that an item has been selected.
-                        mListener?.onListFragmentInteraction(item)
-                    }
+            var info: RouterInfo = v.tag as RouterInfo
+            //root - administrator
+            var connection = RouterConnection(info.ipString, info.uname, info.password)
+            connection.connect()
+
+            // Notify the active callbacks interface (the activity, if the fragment is attached to
+            // one) that an item has been selected.
+            //mListener?.onListFragmentInteraction(info)
+        }
 
     }
 
@@ -53,6 +81,8 @@ class MyItemRecyclerViewAdapter(
         holder.mSubContentView.visibility = (if (info.expanded) View.VISIBLE else View.GONE)
 
         with(holder.mSubContentView.loginButton){
+            info.uname = holder.mSubContentView.uname.text.toString()
+            info.password = holder.mSubContentView.password.text.toString()
             tag = info
             setOnClickListener(mOnClickListener)
         }
@@ -66,15 +96,6 @@ class MyItemRecyclerViewAdapter(
                 notifyItemChanged(position)
             }
         }
-    }
-
-
-    private fun ipToString(i: Int): String {
-        return (i and 0xFF).toString() + "." +
-                (i shr 8 and 0xFF) + "." +
-                (i shr 16 and 0xFF) + "." +
-                (i shr 24 and 0xFF)
-
     }
 
     override fun getItemCount(): Int = 1
