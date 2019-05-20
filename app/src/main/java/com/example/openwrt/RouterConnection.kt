@@ -2,44 +2,49 @@ package com.example.openwrt
 
 import android.util.Log
 import com.github.kittinunf.fuel.Fuel
-import com.github.kittinunf.fuel.core.ResponseDeserializable
 import com.github.kittinunf.fuel.core.extensions.jsonBody
-import com.google.gson.Gson
+import com.github.kittinunf.fuel.gson.responseObject
 
-class RouterConnection(private var ip: String, private var uname: String, private var pwd: String){
+class RouterConnection(private var info: RouterInfo, private var uname: String, private var pwd: String, private var listener: OnNetworkElementChange){
 
     private var key: String? = ""
+    var connected: Boolean = false
+    var failed: Boolean = false
 
     init{
 
     }
 
-    //User Model
-    data class LoginResponse(val id: Int = 0, val result: String = "", val error: String? = null) {
 
-        //User Deserializer
-        class Deserializer : ResponseDeserializable<LoginResponse> {
-            override fun deserialize(content: String) = Gson().fromJson(content, LoginResponse::class.java)
-        }
-
+    interface OnNetworkElementChange {
+        // TODO: Update argument type and name
+        fun onNetworkElementChange(connected: Boolean, info: RouterInfo)
     }
 
-    fun connect(): Boolean{
-        Fuel.post("http://$ip/cgi-bin/luci/rpc/auth")
+    //User Model
+    data class LoginResponse(val id: Int = 0, val result: String? = null, val error: String? = null)
+
+    fun connect() {
+        Fuel.post("http://${info.ipString}/cgi-bin/luci/rpc/auth")
             .jsonBody("{\"id\": 1, \"method\": \"login\", \"params\": [\"$uname\", \"$pwd\"]}")
-            .responseObject(LoginResponse.Deserializer()) { request, response, result ->
+            .responseObject<LoginResponse> { request, response, result ->
                 Log.v("Response", request.toString())
                 Log.v("Response", response.responseMessage)
                 Log.v("Response", result.toString())
-                val (loginInfo, error) = result
-                if(loginInfo?.error == null){
-                    this.key = loginInfo?.result
-                    Log.v("Response", this.key)
+                Log.v("Response", result.component1().toString())
+
+                if(result.component1()?.error.equals(null) and !result.component1()?.result.equals(null)){
+                    this.key = result.component1()?.result
+                    Log.v("Response", this.key.toString())
+                    this.connected = true
+                    listener.onNetworkElementChange(true, info)
                 }else{
-                    false
+                    Log.v("Response", "Failed Connection!")
+                    this.key = null
+                    this.failed = true
+                    listener.onNetworkElementChange(false, info)
                 }
 
             }
-        return true
     }
 }

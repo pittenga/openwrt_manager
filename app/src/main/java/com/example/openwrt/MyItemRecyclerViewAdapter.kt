@@ -9,6 +9,7 @@ import android.widget.TextView
 
 
 import com.example.openwrt.RouterSelectionFragment.OnListFragmentInteractionListener
+import com.example.openwrt.RouterConnection.OnNetworkElementChange
 import com.example.openwrt.dummy.DummyContent.DummyItem
 
 import kotlinx.android.synthetic.main.fragment_item.view.*
@@ -30,7 +31,7 @@ import kotlin.collections.ArrayList
 class MyItemRecyclerViewAdapter(
     private val mInfoList: ArrayList<RouterInfo>,
     private val mListener: OnListFragmentInteractionListener?
-) : RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder>(), OnNetworkElementChange {
 
 
     fun json(build: JsonObjectBuilder.() -> Unit): JSONObject {
@@ -56,6 +57,17 @@ class MyItemRecyclerViewAdapter(
 
     }
 
+    override fun onNetworkElementChange(connected: Boolean, info: RouterInfo) {
+        if (connected){
+            Log.v("List 1", "Connection Accepted!")
+            // Notify the active callbacks interface (the activity, if the fragment is attached to
+            // one) that an item has been selected.
+            mListener?.onListFragmentInteraction(info)
+        }else{
+            Log.v("List 1", "Connection Rejected!")
+        }
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.fragment_item, parent, false)
@@ -76,12 +88,9 @@ class MyItemRecyclerViewAdapter(
                 var info: RouterInfo = v.tag as RouterInfo
                 //root - administrator
 
-                var connection = RouterConnection(info.ipString, uname.text.toString(), password.text.toString())
+                var connection = RouterConnection(info, uname.text.toString(), password.text.toString(), this@MyItemRecyclerViewAdapter)
                 connection.connect()
 
-                // Notify the active callbacks interface (the activity, if the fragment is attached to
-                // one) that an item has been selected.
-                //mListener?.onListFragmentInteraction(info)
             }
         }
 
