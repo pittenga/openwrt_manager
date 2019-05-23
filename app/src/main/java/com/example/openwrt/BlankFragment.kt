@@ -1,6 +1,5 @@
 package com.example.openwrt
 
-import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -8,9 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.openwrt.dummy.DummyContent
-import kotlinx.android.synthetic.main.fragment_login.*
-import kotlinx.android.synthetic.main.fragment_login.view.*
+import kotlinx.android.synthetic.main.fragment_details.view.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -47,7 +44,7 @@ class BlankFragment : Fragment(), View.OnClickListener {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_login, container, false)
+        val view = inflater.inflate(R.layout.fragment_details, container, false)
         view.loginButton.setOnClickListener(this);
         return view
     }
