@@ -18,7 +18,6 @@ class RouterConnection(private var info: RouterInfo, private var uname: String, 
 
 
     interface OnNetworkElementChange {
-        // TODO: Update argument type and name
         fun onNetworkElementChange(connected: Boolean, info: RouterInfo)
     }
 

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+>
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
@@ -23,10 +24,11 @@
                 android:textAppearance="?attr/textAppearanceListItem"/>
     </LinearLayout>
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:id="@+id/sub_item">
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="vertical"
+                  android:id="@+id/sub_item" android:background="#7C008577"
+                  android:padding="8dp">
         <TextView
                 android:text="@string/username"
                 android:layout_width="match_parent"
