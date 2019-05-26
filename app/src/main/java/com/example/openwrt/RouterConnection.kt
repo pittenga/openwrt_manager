@@ -27,10 +27,10 @@ class RouterConnection(private var info: RouterInfo, private var uname: String, 
     fun connect() {
         Fuel.post("http://${info.ipString}/cgi-bin/luci/rpc/auth")
             .jsonBody("{\"id\": 1, \"method\": \"login\", \"params\": [\"$uname\", \"$pwd\"]}")
-            .responseObject<LoginResponse> { request, response, result ->
+            .responseObject<LoginResponse> { _, _, result ->
                 when (result) {
                     is Result.Success -> {
-                        val (data, err) = result
+                        val (data, _) = result
                         if (data?.error.isNullOrEmpty() and !data?.result.isNullOrEmpty()) {
                             this.key = data?.result
                             Log.v("Response", this.key.toString())

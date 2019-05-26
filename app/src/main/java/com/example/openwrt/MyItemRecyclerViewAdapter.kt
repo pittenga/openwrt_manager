@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.TextView
 
 
@@ -59,7 +60,29 @@ class MyItemRecyclerViewAdapter(
 
         val info = mInfoList[position]
 
-        holder.mIdView.text = info.ipString
+        //holder.mIdView.text = info.ipString
+        holder.mFirstIp.setText(info.ipArray?.get(0))
+        holder.mSecondIp.setText(info.ipArray?.get(1))
+        holder.mThirdIp.setText(info.ipArray?.get(2))
+        holder.mFourthIp.setText(info.ipArray?.get(3))
+
+        if(info.netmask and 0xFF != 0){
+            Log.v("List 1", "First IP frozen!")
+            holder.mFirstIp.isEnabled = false
+        }
+        if(info.netmask shr 8 and 0xFF != 0){
+            Log.v("List 1", "Second IP frozen!")
+            holder.mSecondIp.isEnabled = false
+        }
+        if(info.netmask shr 16 and 0xFF != 0){
+            Log.v("List 1", "Third IP frozen!")
+            holder.mThirdIp.isEnabled = false
+        }
+        if(info.netmask shr 24 and 0xFF != 0){
+            Log.v("List 1", "Fourth IP frozen!")
+            holder.mFourthIp.isEnabled = false
+        }
+
         holder.mContentView.text = info.ssid
         holder.mSubContentView.visibility = (if (info.expanded) View.VISIBLE else View.GONE)
 
@@ -84,10 +107,13 @@ class MyItemRecyclerViewAdapter(
         }
     }
 
-    override fun getItemCount(): Int = 1
+    override fun getItemCount(): Int = mInfoList.size;
 
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
-        val mIdView: TextView = mView.item_number
+        val mFirstIp: EditText = mView.firstIP
+        val mSecondIp: EditText = mView.secondIP
+        val mThirdIp: EditText = mView.thirdIP
+        val mFourthIp: EditText = mView.fourthIP
         val mContentView: TextView = mView.content
         val mSubContentView: LinearLayout = mView.sub_item
 

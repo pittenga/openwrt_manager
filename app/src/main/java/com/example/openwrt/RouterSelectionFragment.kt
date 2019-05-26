@@ -51,9 +51,7 @@ class RouterSelectionFragment : Fragment() {
                 }
                 val wm = context.getSystemService(Context.WIFI_SERVICE) as WifiManager
                 var list = ArrayList<RouterInfo>()
-                list.add(RouterInfo(wm.dhcpInfo.gateway, wm.connectionInfo.ssid))
-                //TODO: This isn't working...
-                list.add(RouterInfo(wm.dhcpInfo.gateway, wm.connectionInfo.ssid))
+                list.add(RouterInfo(wm.dhcpInfo.gateway, wm.connectionInfo.ssid, wm.dhcpInfo.netmask))
                 adapter = MyItemRecyclerViewAdapter(list, listener)
             }
         }
