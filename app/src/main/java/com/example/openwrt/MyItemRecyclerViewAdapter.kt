@@ -33,25 +33,6 @@ class MyItemRecyclerViewAdapter(
     private val mListener: OnListFragmentInteractionListener?
 ) : RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder>(), OnNetworkElementChange {
 
-
-    fun json(build: JsonObjectBuilder.() -> Unit): JSONObject {
-        return JsonObjectBuilder().json(build)
-    }
-
-    class JsonObjectBuilder {
-        private val deque: Deque<JSONObject> = ArrayDeque()
-
-        fun json(build: JsonObjectBuilder.() -> Unit): JSONObject {
-            deque.push(JSONObject())
-            this.build()
-            return deque.pop()
-        }
-
-        infix fun <T> String.To(value: T) {
-            deque.peek().put(this, value)
-        }
-    }
-
     init {
 
 
@@ -85,10 +66,8 @@ class MyItemRecyclerViewAdapter(
         with(holder.mSubContentView){
             loginButton.tag = info
             loginButton.setOnClickListener { v ->
-                var info: RouterInfo = v.tag as RouterInfo
                 //root - administrator
-
-                var connection = RouterConnection(info, uname.text.toString(), password.text.toString(), this@MyItemRecyclerViewAdapter)
+                var connection = RouterConnection(v.tag as RouterInfo, uname.text.toString(), password.text.toString(), this@MyItemRecyclerViewAdapter)
                 connection.connect()
 
             }
